@@ -1,0 +1,91 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+interface Command {
+    + execute(args: String[]): void
+    + getDescription(): String
+}
+
+class CommandInvoker {
+    - commands: Map
+    - collection: LinkedList
+    - inputHandler: InputHandler
+    - originalInputHandler: InputHandler
+    - runningScripts: Set
+    + execute(String, String[]): void
+    + updateInputHandler(InputHandler): void
+    + restoreInputHandler(): void
+}
+
+class HelpCommand {
+    - commands: Map
+}
+class InfoCommand {
+    - collection: LinkedList
+}
+class ShowCommand {
+    - collection: LinkedList
+}
+class AddCommand {
+    - collection: LinkedList
+    - inputHandler: InputHandler
+}
+class UpdateCommand {
+    - collection: LinkedList
+    - inputHandler: InputHandler
+}
+class RemoveByIdCommand {
+    - collection: LinkedList
+}
+class ClearCommand {
+    - collection: LinkedList
+}
+class SaveCommand {
+    - collection: LinkedList
+    - filename: String
+}
+class ExecuteScriptCommand {
+    - invoker: CommandInvoker
+    - runningScripts: Set
+}
+class ExitCommand
+class RemoveFirstCommand {
+    - collection: LinkedList
+}
+class HeadCommand {
+    - collection: LinkedList
+}
+class RemoveLowerCommand {
+    - collection: LinkedList
+    - inputHandler: InputHandler
+}
+class RemoveAllByTypeCommand {
+    - collection: LinkedList
+}
+class AverageCommand {
+    - collection: LinkedList
+}
+class CountGreaterCommand {
+    - collection: LinkedList
+}
+
+Command <|.. HelpCommand
+Command <|.. InfoCommand
+Command <|.. ShowCommand
+Command <|.. AddCommand
+Command <|.. UpdateCommand
+Command <|.. RemoveByIdCommand
+Command <|.. ClearCommand
+Command <|.. SaveCommand
+Command <|.. ExecuteScriptCommand
+Command <|.. ExitCommand
+Command <|.. RemoveFirstCommand
+Command <|.. HeadCommand
+Command <|.. RemoveLowerCommand
+Command <|.. RemoveAllByTypeCommand
+Command <|.. AverageCommand
+Command <|.. CountGreaterCommand
+
+CommandInvoker --> Command
+ExecuteScriptCommand --> CommandInvoker
+@enduml

@@ -1,0 +1,55 @@
+clear
+save
+add
+FirstOrg
+10
+20
+500.5
+commercial
+123456
+5
+2.5
+Moscow
+add
+SecondOrg
+30
+40
+100.1
+trust
+654321
+8
+3.5
+SPb
+add
+ThirdOrg
+50
+60
+300.0
+commercial
+111111
+1
+1.5
+Kazan
+show
+info
+head
+average_of_annual_turnover
+count_greater_than_postal_address 111111
+remove_first
+show
+remove_by_id 3
+show
+update 2
+UpdatedOrg
+99
+88
+777.7
+private_limited_company
+999999
+7
+7.7
+Novgorod
+show
+remove_all_by_type trust
+show
+save

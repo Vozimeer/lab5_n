@@ -1,0 +1,36 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class FileManager {
+    + {static} loadFromFile(String): LinkedList
+    - {static} parseOrganizations(String, LinkedList): void
+    - {static} parseOrganization(String): Organization
+    - {static} getTag(String, String): String
+    + {static} saveToFile(String, LinkedList): void
+    - {static} toXml(Organization): String
+    - {static} escape(String): String
+}
+
+class InputHandler {
+    - scanner: Scanner
+    - interactive: boolean
+    + InputHandler(Scanner, boolean)
+    + readOrganization(): Organization
+    - readCoordinates(): Coordinates
+    - readAddress(): Address
+    - readLocation(): Location
+    - readOrganizationType(): OrganizationType
+    - readLineSafe(): String
+}
+
+class ScriptException {
+    + ScriptException(String)
+}
+
+class Main {
+    + {static} main(String[]): void
+}
+
+Main --> FileManager
+InputHandler ..> ScriptException
+@enduml

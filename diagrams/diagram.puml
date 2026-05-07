@@ -1,0 +1,240 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package model {
+    class Organization {
+        - id: long
+        - name: String
+        - coordinates: Coordinates
+        - creationDate: ZonedDateTime
+        - annualTurnover: float
+        - type: OrganizationType
+        - postalAddress: Address
+        - nextId: long
+        + Organization(name, coords, turnover, type, address)
+        + Organization(id, name, coords, date, turnover, type, address)
+        + getId(): long
+        + getName(): String
+        + getCoordinates(): Coordinates
+        + getCreationDate(): ZonedDateTime
+        + getAnnualTurnover(): float
+        + getType(): OrganizationType
+        + getPostalAddress(): Address
+        + compareTo(Organization): int
+        + updateNextId(LinkedList): void
+        + toString(): String
+    }
+
+    class Coordinates {
+        - x: long
+        - y: Long
+        + Coordinates(long, Long)
+        + getX(): long
+        + getY(): Long
+        + toString(): String
+    }
+
+    class Address {
+        - zipCode: String
+        - town: Location
+        + Address(String, Location)
+        + getZipCode(): String
+        + getTown(): Location
+        + toString(): String
+    }
+
+    class Location {
+        - x: Integer
+        - y: float
+        - name: String
+        + Location(Integer, float, String)
+        + getX(): Integer
+        + getY(): float
+        + getName(): String
+        + toString(): String
+    }
+
+    enum OrganizationType {
+        COMMERCIAL
+        TRUST
+        PRIVATE_LIMITED_COMPANY
+    }
+}
+
+package command {
+    interface Command {
+        + execute(args: String[]): void
+        + getDescription(): String
+    }
+
+    class HelpCommand {
+        - commands: Map
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class InfoCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class ShowCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class AddCommand {
+        - collection: LinkedList
+        - inputHandler: InputHandler
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class UpdateCommand {
+        - collection: LinkedList
+        - inputHandler: InputHandler
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class RemoveByIdCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class ClearCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class SaveCommand {
+        - collection: LinkedList
+        - filename: String
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class ExecuteScriptCommand {
+        - invoker: CommandInvoker
+        - runningScripts: Set
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class ExitCommand {
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class RemoveFirstCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class HeadCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class RemoveLowerCommand {
+        - collection: LinkedList
+        - inputHandler: InputHandler
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class RemoveAllByTypeCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class AverageCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class CountGreaterCommand {
+        - collection: LinkedList
+        + execute(String[]): void
+        + getDescription(): String
+    }
+
+    class CommandInvoker {
+        - commands: Map
+        - collection: LinkedList
+        - inputHandler: InputHandler
+        - originalInputHandler: InputHandler
+        - runningScripts: Set
+        + execute(String, String[]): void
+        + getCommands(): Map
+        + updateInputHandler(InputHandler): void
+        + restoreInputHandler(): void
+    }
+}
+
+package util {
+    class FileManager {
+        + loadFromFile(String): LinkedList
+        - parseOrganizations(String, LinkedList): void
+        - parseOrganization(String): Organization
+        - getTag(String, String): String
+        + saveToFile(String, LinkedList): void
+        - toXml(Organization): String
+        - escape(String): String
+    }
+
+    class InputHandler {
+        - scanner: Scanner
+        + readOrganization(): Organization
+        - readCoordinates(): Coordinates
+        - readAddress(): Address
+        - readLocation(): Location
+        - readOrganizationType(): OrganizationType
+        + readId(): long
+        + readLine(): String
+    }
+}
+
+class Main {
+    + main(String[]): void
+}
+
+Organization --> Coordinates
+Organization --> Address
+Organization --> OrganizationType
+Address --> Location
+
+Command <|.. HelpCommand
+Command <|.. InfoCommand
+Command <|.. ShowCommand
+Command <|.. AddCommand
+Command <|.. UpdateCommand
+Command <|.. RemoveByIdCommand
+Command <|.. ClearCommand
+Command <|.. SaveCommand
+Command <|.. ExecuteScriptCommand
+Command <|.. ExitCommand
+Command <|.. RemoveFirstCommand
+Command <|.. HeadCommand
+Command <|.. RemoveLowerCommand
+Command <|.. RemoveAllByTypeCommand
+Command <|.. AverageCommand
+Command <|.. CountGreaterCommand
+
+CommandInvoker --> Command
+CommandInvoker --> InputHandler
+ExecuteScriptCommand --> CommandInvoker
+Main --> CommandInvoker
+Main --> FileManager
+Main --> Organization
+CommandInvoker --> Organization
+FileManager --> Organization
+@enduml

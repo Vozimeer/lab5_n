@@ -17,7 +17,6 @@ public class SaveCommand implements Command {
     @Override
     public void execute(String[] args) {
         FileManager.saveToFile(filename, collection);
-        System.out.println("Сохранено в " + filename);
     }
 
     @Override

@@ -82,8 +82,16 @@ public class InputHandler {
     private long readLong(String fieldName) {
         while (true) {
             System.out.print("Введите " + fieldName + ": ");
+            String line = readLineSafe();
             try {
-                return Long.parseLong(readLineSafe());
+                java.math.BigInteger num = new java.math.BigInteger(line);
+                if (num.compareTo(java.math.BigInteger.valueOf(Long.MAX_VALUE)) > 0 ||
+                        num.compareTo(java.math.BigInteger.valueOf(Long.MIN_VALUE)) < 0) {
+                    if (!interactive) throw new ScriptException("Число слишком большое в поле " + fieldName);
+                    System.out.println("Число слишком большое для типа long");
+                    continue;
+                }
+                return num.longValue();
             } catch (NumberFormatException e) {
                 if (!interactive) throw new ScriptException("Не число в поле " + fieldName);
                 System.out.println("Нужно целое число");
@@ -101,7 +109,14 @@ public class InputHandler {
                 continue;
             }
             try {
-                return Long.parseLong(line);
+                java.math.BigInteger num = new java.math.BigInteger(line);
+                if (num.compareTo(java.math.BigInteger.valueOf(Long.MAX_VALUE)) > 0 ||
+                        num.compareTo(java.math.BigInteger.valueOf(Long.MIN_VALUE)) < 0) {
+                    if (!interactive) throw new ScriptException("Число слишком большое в поле " + fieldName);
+                    System.out.println("Число слишком большое для типа long");
+                    continue;
+                }
+                return num.longValue();
             } catch (NumberFormatException e) {
                 if (!interactive) throw new ScriptException("Не число в поле " + fieldName);
                 System.out.println("Нужно целое число");
@@ -119,7 +134,14 @@ public class InputHandler {
                 continue;
             }
             try {
-                return Integer.parseInt(line);
+                java.math.BigInteger num = new java.math.BigInteger(line);
+                if (num.compareTo(java.math.BigInteger.valueOf(Integer.MAX_VALUE)) > 0 ||
+                        num.compareTo(java.math.BigInteger.valueOf(Integer.MIN_VALUE)) < 0) {
+                    if (!interactive) throw new ScriptException("Число слишком большое в поле " + fieldName);
+                    System.out.println("Число слишком большое для типа int");
+                    continue;
+                }
+                return num.intValue();
             } catch (NumberFormatException e) {
                 if (!interactive) throw new ScriptException("Не число в поле " + fieldName);
                 System.out.println("Нужно целое число");
@@ -131,7 +153,14 @@ public class InputHandler {
         while (true) {
             System.out.print("Введите " + fieldName + ": ");
             try {
-                return Float.parseFloat(readLineSafe());
+                String line = readLineSafe().replace(',', '.');
+                float val = Float.parseFloat(line);
+                if (Float.isInfinite(val)) {
+                    if (!interactive) throw new ScriptException("Число слишком большое в поле " + fieldName);
+                    System.out.println("Число слишком большое для типа float");
+                    continue;
+                }
+                return val;
             } catch (NumberFormatException e) {
                 if (!interactive) throw new ScriptException("Не число в поле " + fieldName);
                 System.out.println("Нужно число");
@@ -143,7 +172,13 @@ public class InputHandler {
         while (true) {
             System.out.print("Введите " + fieldName + " (>0): ");
             try {
-                float val = Float.parseFloat(readLineSafe());
+                String line = readLineSafe().replace(',', '.');
+                float val = Float.parseFloat(line);
+                if (Float.isInfinite(val)) {
+                    if (!interactive) throw new ScriptException("Число слишком большое в поле " + fieldName);
+                    System.out.println("Число слишком большое для типа float");
+                    continue;
+                }
                 if (val > 0) return val;
                 if (!interactive) throw new ScriptException("Значение должно быть больше 0 в поле " + fieldName);
                 System.out.println("Значение должно быть больше 0");

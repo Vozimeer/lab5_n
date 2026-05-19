@@ -108,6 +108,10 @@ public class FileManager {
             System.out.println("Нет прав на запись в файл " + filename);
             return;
         }
+        if (!file.exists() && !file.getParentFile().canWrite()) {
+            System.out.println("Нет прав на создание файла в директории");
+            return;
+        }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
             writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -116,6 +120,7 @@ public class FileManager {
                 writer.println(toXml(org));
             }
             writer.println("</Organizations>");
+            System.out.println("Сохранено в " + filename);
         } catch (IOException e) {
             System.err.println("Ошибка записи в файл");
         }

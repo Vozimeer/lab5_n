@@ -1,0 +1,65 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package model {
+    class Organization {
+        - id: long
+        - name: String
+        - coordinates: Coordinates
+        - creationDate: ZonedDateTime
+        - annualTurnover: float
+        - type: OrganizationType
+        - postalAddress: Address
+    }
+    class Coordinates {
+        - x: long
+        - y: Long
+    }
+    class Address {
+        - zipCode: String
+        - town: Location
+    }
+    class Location {
+        - x: Integer
+        - y: float
+        - name: String
+    }
+    enum OrganizationType {
+        COMMERCIAL
+        TRUST
+        PRIVATE_LIMITED_COMPANY
+    }
+}
+
+package request {
+    abstract class Request {
+        - commandName: String
+    }
+    class CommandRequest extends Request
+    class IdRequest extends Request {
+        - id: long
+    }
+    class OrganizationRequest extends Request {
+        - organization: Organization
+        - id: long
+    }
+    class TypeRequest extends Request {
+        - type: OrganizationType
+    }
+    class ZipRequest extends Request {
+        - zipCode: String
+    }
+}
+
+package response {
+    class Response {
+        - message: String
+        - success: boolean
+    }
+}
+
+Organization --> Coordinates
+Organization --> Address
+Organization --> OrganizationType
+Address --> Location
+@enduml

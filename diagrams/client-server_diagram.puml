@@ -1,0 +1,128 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package common {
+    package model {
+        class Organization {
+            - id: long
+            - name: String
+            - coordinates: Coordinates
+            - creationDate: ZonedDateTime
+            - annualTurnover: float
+            - type: OrganizationType
+            - postalAddress: Address
+        }
+        class Coordinates {
+            - x: long
+            - y: Long
+        }
+        class Address {
+            - zipCode: String
+            - town: Location
+        }
+        class Location {
+            - x: Integer
+            - y: float
+            - name: String
+        }
+        enum OrganizationType {
+            COMMERCIAL
+            TRUST
+            PRIVATE_LIMITED_COMPANY
+        }
+    }
+    package request {
+        abstract class Request {
+            - commandName: String
+        }
+        class CommandRequest extends Request
+        class IdRequest extends Request {
+            - id: long
+        }
+        class OrganizationRequest extends Request {
+            - organization: Organization
+            - id: long
+        }
+        class TypeRequest extends Request {
+            - type: OrganizationType
+        }
+        class ZipRequest extends Request {
+            - zipCode: String
+        }
+    }
+    package response {
+        class Response {
+            - message: String
+            - success: boolean
+        }
+    }
+}
+
+package server {
+    class ServerMain
+    class NetworkServer {
+        - port: int
+        + start(): void
+    }
+    class ServerCommandInvoker {
+        + execute(Request): Response
+    }
+    class CollectionManager {
+        + add(Organization): String
+        + update(long, Organization): String
+        + removeById(long): String
+        + clear(): String
+        + removeFirst(): String
+        + head(): String
+        + removeLower(Organization): String
+        + removeAllByType(OrganizationType): String
+        + averageOfAnnualTurnover(): String
+        + countGreaterThanPostalAddress(String): String
+        + info(): String
+        + show(): String
+    }
+    class FileManager {
+        + loadFromFile(String): LinkedList
+        + saveToFile(String, LinkedList): void
+    }
+}
+
+package client {
+    class ClientMain
+    class ClientCommandInvoker {
+        + parseCommand(String): Request
+        + parseCommandFromScript(String, String, BufferedReader): Request
+    }
+    class NetworkClient {
+        + sendRequest(Request): Response
+    }
+    class InputHandler {
+        + readOrganization(): Organization
+    }
+    class ScriptException
+}
+
+Organization --> Coordinates
+Organization --> Address
+Organization --> OrganizationType
+Address --> Location
+
+ServerMain --> NetworkServer
+ServerMain --> FileManager
+ServerMain --> CollectionManager
+NetworkServer --> ServerCommandInvoker
+ServerCommandInvoker --> CollectionManager
+ServerCommandInvoker --> FileManager
+
+ClientMain --> ClientCommandInvoker
+ClientMain --> NetworkClient
+ClientCommandInvoker --> InputHandler
+NetworkClient --> Request
+NetworkClient --> Response
+
+ServerCommandInvoker --> Request
+ServerCommandInvoker --> Response
+InputHandler ..> ScriptException
+
+NetworkClient ..> NetworkServer : UDP
+@enduml

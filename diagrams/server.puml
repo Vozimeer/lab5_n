@@ -1,0 +1,34 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class ServerMain
+class NetworkServer {
+    - port: int
+    + start(): void
+}
+class ServerCommandInvoker {
+    + execute(Request): Response
+}
+class CollectionManager {
+    + add(Organization): String
+    + update(long, Organization): String
+    + removeById(long): String
+    + clear(): String
+    + removeFirst(): String
+    + head(): String
+    + removeLower(Organization): String
+    + removeAllByType(OrganizationType): String
+    + averageOfAnnualTurnover(): String
+    + countGreaterThanPostalAddress(String): String
+    + info(): String
+    + show(): String
+}
+class FileManager
+
+ServerMain --> NetworkServer
+ServerMain --> FileManager
+ServerMain --> CollectionManager
+NetworkServer --> ServerCommandInvoker
+ServerCommandInvoker --> CollectionManager
+ServerCommandInvoker --> FileManager
+@enduml

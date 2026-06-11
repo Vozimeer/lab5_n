@@ -1,0 +1,33 @@
+package common.model;
+
+import java.io.Serializable;
+
+/**
+ * Локация (город) с координатами и названием.
+ */
+public class Location implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private Integer x;
+    private float y;
+    private String name;
+
+    /**
+     * @param x    координата X, не null
+     * @param y    координата Y
+     * @param name название, не null и не пустое
+     */
+    public Location(Integer x, float y, String name) {
+        this.x = x;
+        this.y = y;
+        this.name = name;
+    }
+
+    public Integer getX() { return x; }
+    public float getY() { return y; }
+    public String getName() { return name; }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ", " + name + ")";
+    }
+}

@@ -1,0 +1,19 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class ClientMain
+class ClientCommandInvoker {
+    + parseCommand(String): Request
+    + parseCommandFromScript(String, String, BufferedReader): Request
+}
+class NetworkClient {
+    + sendRequest(Request): Response
+}
+class InputHandler
+class ScriptException
+
+ClientMain --> ClientCommandInvoker
+ClientMain --> NetworkClient
+ClientCommandInvoker --> InputHandler
+InputHandler ..> ScriptException
+@enduml
